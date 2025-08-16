@@ -1,4 +1,4 @@
-export class SightWordsTrainer {
+export class MathTrainer {
   constructor(wordLists) {
     this.wordLists = wordLists;
     this.words = []
@@ -116,7 +116,12 @@ export class SightWordsTrainer {
   randomWordThatIsNot(word) {
     let otherWords = this.words.slice()
     otherWords.splice(this.words.indexOf(word), 1)
-    return otherWords[Math.floor(Math.random() * otherWords.length)]
+    let otherword = otherWords[Math.floor(Math.random() * otherWords.length)]
+    if(this.answerOnly(otherword) == this.answerOnly(word)) {
+      return this.randomWordThatIsNot(word)
+    } else {
+      return otherword;
+    }
   }
 
   randomIncorrectWord() {
@@ -125,5 +130,13 @@ export class SightWordsTrainer {
 
   correctWord() {
     return this.words[this.correctIndex]
+  }
+
+  withoutAnswer(word) {
+    return word.substring(0, word.indexOf("="))
+  }
+
+  answerOnly(word) {
+    return word.substring(word.indexOf("=") + 1)
   }
 }

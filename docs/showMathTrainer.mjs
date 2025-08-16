@@ -1,13 +1,13 @@
-import { SightWordsTrainer } from "./sightWordsTrainer.mjs";
+import { MathTrainer } from "./mathTrainer.mjs";
 
-export default class HearSightWordsTrainer extends SightWordsTrainer {
+export default class ShowMathTrainer extends MathTrainer {
   constructor(wordLists) {
     super(wordLists)
   }
 
   speak(text) {
     window.speechSynthesis.cancel()
-    const utterance = new SpeechSynthesisUtterance(text)
+    const utterance = new SpeechSynthesisUtterance(this.withoutAnswer(text))
     utterance.rate = 0.8;
     utterance.lang = 'en-US';
     window.speechSynthesis.speak(utterance);
@@ -16,6 +16,14 @@ export default class HearSightWordsTrainer extends SightWordsTrainer {
   showWords() {
     const container = document.getElementById('responseOptions')
     container.innerHTML = '';
+
+    const result = document.createElement('button')
+    result.innerHTML = this.withoutAnswer(this.correctWord());
+    result.className = 'response-option'
+    // result.id = `word-${word}`
+    result.style.gridColumn = '1 / span 3'
+    container.appendChild(result)
+
     const wordButtons = [
       ...Array(10).keys(),
       this.correctWord(),
@@ -26,7 +34,7 @@ export default class HearSightWordsTrainer extends SightWordsTrainer {
         result = document.createElement('div')
       } else {
         result = document.createElement('button')
-        result.innerHTML = word;
+        result.innerHTML = this.answerOnly(word);
         result['ontouchstart' in window ? 'ontouchstart' : 'onclick'] = (() => this.checkWord(word, result)).bind(this)
       }
       result.id = `word-${word}`

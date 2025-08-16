@@ -1,6 +1,6 @@
-import { SightWordsTrainer } from "./sightWordsTrainer.mjs";
+import { MathTrainer } from "./mathTrainer.mjs";
 
-export default class SpeakSightWordsTrainer extends SightWordsTrainer {
+export default class SpeakMathTrainer extends MathTrainer {
   constructor(wordLists) {
     super(wordLists)
     if(!document.getElementById('listeningIndicator')) {
@@ -64,7 +64,7 @@ export default class SpeakSightWordsTrainer extends SightWordsTrainer {
     container.innerHTML = ''
     this.listenForWord(word, () => {
       const result = document.createElement('button')
-      result.innerHTML = word;
+      result.innerHTML = this.withoutAnswer(word);
       result.className = 'response-option'
       result.id = `word-${word}`
       result.style.gridColumn = '1 / span 3'
