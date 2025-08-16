@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div id="navigation">
+    <a id="nav-hear" href="?type=hear">Hear</a>
+    <a id="nav-speak" href="?type=speak">Speak</a>
+  </div>
+  <div id="overlay"></div>
+  <div id="responseOptions"></div>
+  <progress id="progress" value="0" max="100"> </progress>
+  <script type="module">
+    const urlParams = new URLSearchParams(window.location.search);
+    const requestedGameType = urlParams.get('type') || 'hear';
+
+    document.getElementById(`nav-${requestedGameType}`).className = 'active'
+
+    let gameModule = requestedGameType == 'hear' ? './hearSightWordsTrainer.mjs' : './speakSightWordsTrainer.mjs';
+    import(gameModule).then(module => {
+      fetch('./wordList.json').then(response => {
+        response.json().then(wordLists => {
+          window.game = new module.default(wordLists)
+        })
+      })
+    })
+  </script>
+</body>
+</html>
